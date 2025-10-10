@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
  * Reads MONGO_URI from environment. Returns a Promise that resolves when connected.
  */
 export default function connectDB() {
-    const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/aia_bot_db';
+    const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/assistant_db';
 
     const options = {
         // useNewUrlParser and useUnifiedTopology are default in mongoose v6+, but keep for clarity
