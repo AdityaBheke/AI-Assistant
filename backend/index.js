@@ -12,19 +12,27 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // CORS configuration
-// If FRONTEND_URL is set in env, allow only that origin. Otherwise reflect the request origin.
-const corsOptions = {
-    origin: process.env.FRONTEND_URL || true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // enable pre-flight for all routes
-
+app.use(cors());
 // Basic route
 app.get('/', (req, res) => {
     res.send('Hello, World!');
+});
+
+// 404 handler for unknown API routes
+app.use((req, res, next) => {
+    const err = new Error('API route not found');
+    err.status = 404;
+    next(err);
+});
+
+// Global error handler
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const payload = {
+        message: err.message || 'Internal Server Error',
+    };
+    res.status(status).json(payload);
 });
 
 // Start server after DB connection
