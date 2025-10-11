@@ -1,30 +1,23 @@
 import express from 'express';
+import {
+    createLead,
+    getAllLeads,
+    getLeadById,
+    updateLead,
+    deleteLead,
+} from '../controllers/LeadController.js';
 
 const leadRouter = express.Router();
 
 // Get all Leads
-leadRouter.get('/', (req, res) => {
-    res.send('List of all leads');
-})
+leadRouter.get('/', getAllLeads);
 // Create a new Lead
-leadRouter.post('/', (req, res) => {
-    // Lead creation logic here
-    res.send('Lead created');
-});
+leadRouter.post('/', createLead);
 // Get a specific Lead by ID
-leadRouter.get('/:id', (req, res) => {
-    // Fetch lead by ID logic here
-    res.send(`Details of lead with ID: ${req.params.id}`);
-});
+leadRouter.get('/:id', getLeadById);
 // Update a specific Lead by ID
-leadRouter.put('/:id', (req, res) => {
-    // Update lead by ID logic here
-    res.send(`Lead with ID: ${req.params.id} updated`);
-});
+leadRouter.put('/:id', updateLead);
 // Delete a specific Lead by ID
-leadRouter.delete('/:id', (req, res) => {
-    // Delete lead by ID logic here
-    res.send(`Lead with ID: ${req.params.id} deleted`);
-});
+leadRouter.delete('/:id', deleteLead);
 
 export default leadRouter;

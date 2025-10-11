@@ -1,14 +1,10 @@
-import { Router } from "express";
+import { Router } from 'express';
+import { sendEmailToLead, getEmailLogsByLeadId } from '../controllers/EmailLogController.js';
 
 const emailLogRouter = Router();
 
 // Send an email to a lead
-emailLogRouter.post('/send', (req, res) => {
-    // Email sending logic here
-    res.send('Email sent to lead');
-});
+emailLogRouter.post('/send', sendEmailToLead);
 // Get list of email logs for a specific lead
-emailLogRouter.get('/lead/:leadId', (req, res) => {
-    res.send(`Email logs for lead with ID: ${req.params.leadId}`);
-});
+emailLogRouter.get('/lead/:leadId', getEmailLogsByLeadId);
 export default emailLogRouter;
