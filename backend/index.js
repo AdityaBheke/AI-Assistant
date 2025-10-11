@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/leads', leadRouter);
-app.use('/api/email-logs', emailLogRouter);
+app.use('/api/emails', emailLogRouter);
 app.use('/api/conversations', conversationRouter);
 
 // 404 handler for unknown API routes

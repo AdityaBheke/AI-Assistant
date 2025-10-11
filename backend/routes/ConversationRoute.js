@@ -13,7 +13,7 @@ conversationRouter.post('/', createConversation);
 // Get a specific Conversation by Lead ID
 conversationRouter.get('/:leadId', getConversationsByLeadId);
 // Update a summary of Conversation by conversation ID
-conversationRouter.put('/:id', updateConversationSummary);
+conversationRouter.put('/:id/summary', updateConversationSummary);
 // Delete a conversation
 conversationRouter.delete('/:id', deleteConversation);
 
