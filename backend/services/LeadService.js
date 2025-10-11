@@ -28,8 +28,6 @@ const leadService = {
             if (!lead) throw new ApplicationError("Lead not found", 404)
             return {lead}
         } catch (error) {
-            console.log("Error:", error, error.message);
-
             throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
     },
