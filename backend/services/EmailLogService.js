@@ -7,7 +7,8 @@ const emailLogService = {
     async sendEmailToLead(emailData) {
         try {
             // await EmailService.send(emailData);
-
+            //TODO: Integrate actual email sending logic here
+            
             // After sending email, save log
             const savedLog = await EmailLogRepository.saveEmailLog({
                 leadId: emailData.leadId,
