@@ -2,7 +2,7 @@ import { ApplicationError } from "../config/ApplicationError";
 import ProductRepository from "../repositories/ProductRepository.js";
 
 // ProductService: business logic for product operations
-const ProductService = {
+const productService = {
     createProduct: async (productData) => {
         // Create and return a new product
         try {
@@ -63,4 +63,4 @@ const ProductService = {
     }
 }
 
-export default ProductService;
+export default productService;
