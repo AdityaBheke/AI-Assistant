@@ -1,4 +1,4 @@
-import { ApplicationError } from "../config/ApplicationError";
+import { ApplicationError } from "../config/ApplicationError.js";
 import ProductRepository from "../repositories/ProductRepository.js";
 
 // ProductService: business logic for product operations
