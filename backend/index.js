@@ -4,6 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import connectDB from './config/mongoose.connection.js';
+import userRouter from './routes/UserRoutes.js';
+import productRouter from './routes/ProductRoute.js';
+import leadRouter from './routes/LeadRoutes.js';
+import emailLogRouter from './routes/EmailLogRoute.js';
+import conversationRouter from './routes/ConversationRoute.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +22,13 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
+
+// Mount routers
+app.use('/api/users', userRouter);
+app.use('/api/products', productRouter);
+app.use('/api/leads', leadRouter);
+app.use('/api/email-logs', emailLogRouter);
+app.use('/api/conversations', conversationRouter);
 
 // 404 handler for unknown API routes
 app.use((req, res, next) => {
