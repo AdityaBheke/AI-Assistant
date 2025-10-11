@@ -48,7 +48,7 @@ const userService = {
             const users = await UserRepository.getAllUsers();
             return users.map((user) => {
                 const { password: _, ...userWithoutPassword } = user.toObject();
-                return { users: userWithoutPassword };
+                return userWithoutPassword;
             });
         } catch (error) {
             throw new ApplicationError(error.message || 'Error while fetching all users', error.statusCode || 500);
