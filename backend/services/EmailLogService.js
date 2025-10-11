@@ -2,7 +2,7 @@
 import { ApplicationError } from '../config/ApplicationError.js';
 import EmailLogRepository from '../repositories/EmailLogRepository.js';
 
-const EmailLogService = {
+const emailLogService = {
     // Send email to a lead and save the log
     async sendEmailToLead(emailData) {
         try {
@@ -64,4 +64,4 @@ const EmailLogService = {
     }
 };
 
-export default EmailLogService;
+export default emailLogService;
