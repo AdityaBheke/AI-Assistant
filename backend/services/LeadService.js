@@ -9,7 +9,7 @@ const leadService = {
             const lead = await LeadRepository.createLead(leadData);
             return {lead};
         } catch (error) {
-            throw new ApplicationError(err.message || "Error creating lead", err.statusCode || 500);
+            throw new ApplicationError(error.message || "Error creating lead", error.statusCode || 500);
         }
     },
     // Retrieve all leads
@@ -18,7 +18,7 @@ const leadService = {
             const leads = await LeadRepository.getAllLeads();
             return {leads};
         } catch (error) {
-            throw new ApplicationError(err.message || "Error fetching leads", err.statusCode || 500);
+            throw new ApplicationError(error.message || "Error fetching leads", error.statusCode || 500);
         }
     },
     // Get a lead by ID
@@ -28,7 +28,9 @@ const leadService = {
             if (!lead) throw new ApplicationError("Lead not found", 404)
             return {lead}
         } catch (error) {
-            throw new ApplicationError(err.message || "Error fetching lead", err.statusCode || 500);
+            console.log("Error:", error, error.message);
+
+            throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
     },
     // Update a lead by ID
@@ -38,7 +40,7 @@ const leadService = {
             if (!lead) throw new ApplicationError("Lead not found", 404)
             return {lead}
         } catch (error) {
-            throw new ApplicationError(err.message || "Error fetching lead", err.statusCode || 500);
+            throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
     },
     // Delete a lead by ID
@@ -48,7 +50,7 @@ const leadService = {
             if (!lead) throw new ApplicationError("Lead not found", 404);
             return {lead}
         } catch (error) {
-            throw new ApplicationError(err.message || "Error fetching lead", err.statusCode || 500);
+            throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
     },
     // Update lead status
@@ -58,7 +60,7 @@ const leadService = {
             if (!lead) throw new ApplicationError("Lead not found", 404);
             return { lead }
         } catch (error) {
-            throw new ApplicationError(err.message || "Error fetching lead", err.statusCode || 500);
+            throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
     },
     // Find leads by email
@@ -67,7 +69,7 @@ const leadService = {
             const lead = await LeadRepository.findLeadsByEmail(email);
             if (!lead) throw new ApplicationError("Lead not found", 404)
         } catch (error) {
-            throw new ApplicationError(err.message || "Error fetching lead", err.statusCode || 500);
+            throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
     }
 }
