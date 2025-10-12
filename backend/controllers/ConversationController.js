@@ -1,12 +1,13 @@
 import conversationService from "../services/ConversationService.js";
+
 // Create a conversation
 export const createConversation = async (req, res, next) => {
     try {
         const conversationData = req.body;
         const result = await conversationService.createConversation(conversationData);
-        res.status(201).json({ message: 'Conversation created successfully', conversation: result.conversation });
+        return res.status(201).json({ success: true, message: 'Conversation created successfully', conversation: result.conversation });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
@@ -15,9 +16,9 @@ export const getConversationsByLeadId = async(req, res, next) => {
     try {
         const { leadId } = req.params;
         const result = await conversationService.getConversationsByLeadId(leadId);
-        res.status(200).json({ message: 'Fetched conversations by Lead ID successfully', conversations: result.conversations });
+        return res.status(200).json({ success: true, message: 'Fetched conversations by Lead ID successfully', conversations: result.conversations });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
@@ -27,18 +28,19 @@ export const updateConversationSummary = async (req, res, next) => {
         const { id } = req.params;
         const { summary } = req.body;
         const result = await conversationService.updateConversationSummary(id, summary);
-        res.status(200).json({ message: 'Conversation summary updated successfully', conversation: result.conversation });
+        return res.status(200).json({ success: true, message: 'Conversation summary updated successfully', conversation: result.conversation });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
+
 // Delete a conversation
 export const deleteConversation = async (req, res, next) => {
     try {
         const { id } = req.params;
         await conversationService.deleteConversation(id);
-        res.status(200).json({ message: 'Conversation deleted successfully' });
+        return res.status(200).json({ success: true, message: 'Conversation deleted successfully', conversation: null });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };

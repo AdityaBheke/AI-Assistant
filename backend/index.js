@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors());
 // Basic route
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
+    res.json({ success: true, message: 'Hello, World!', result: null });
 });
 
 // Mount routers
@@ -30,21 +30,21 @@ app.use('/api/leads', leadRouter);
 app.use('/api/emails', emailLogRouter);
 app.use('/api/conversations', conversationRouter);
 
-// 404 handler for unknown API routes
+// 404 handler for unknown API routes — standardized response
 app.use((req, res, next) => {
-    const err = new Error('API route not found');
-    err.status = 404;
-    next(err);
+    return res.status(404).json({ success: false, message: 'API route not found', error: null });
 });
 
 // Global error handler
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-    const status = err.statusCode || 500;
+    const status = err.statusCode || err.status || 500;
     const payload = {
+        success: false,
         message: err.message || 'Internal Server Error',
+        error: err.details || null,
     };
-    res.status(status).json(payload);
+    return res.status(status).json(payload);
 });
 
 // Start server after DB connection

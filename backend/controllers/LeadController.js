@@ -5,9 +5,9 @@ export const createLead = async (req, res, next) => {
     try {
         const leadData = req.body;
         const result = await leadService.createLead(leadData);
-        res.status(201).json({ message: 'Lead created successfully', lead: result.lead });
+        return res.status(201).json({ success: true, message: 'Lead created successfully', lead: result.lead });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
@@ -15,9 +15,9 @@ export const createLead = async (req, res, next) => {
 export const getAllLeads = async (req, res, next) => {
     try {
         const result = await leadService.getAllLeads();
-        res.status(200).json({ message: 'Fetched all leads successfully', leads: result.leads });
+        return res.status(200).json({ success: true, message: 'Fetched all leads successfully', leads: result.leads });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
@@ -26,20 +26,20 @@ export const getLeadById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await leadService.getLeadById(id);
-        res.status(200).json({ message: 'Fetched lead by ID successfully', lead: result.lead });
+        return res.status(200).json({ success: true, message: 'Fetched lead by ID successfully', lead: result.lead });
     } catch (error) {
-        next(error);
+        return next(error);
     }
-};  
-// Update a lead
+};
+  // Update a lead
 export const updateLead = async (req, res, next) => {
     try {
         const { id } = req.params;
         const leadData = req.body;
         const result = await leadService.updateLead(id, leadData);
-        res.status(200).json({ message: 'Lead updated successfully', lead: result.lead });
+        return res.status(200).json({ success: true, message: 'Lead updated successfully', lead: result.lead });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
@@ -48,8 +48,8 @@ export const deleteLead = async (req, res, next) => {
     try {
         const { id } = req.params;
         await leadService.deleteLead(id);
-        res.status(200).json({ message: 'Lead deleted successfully' });
+        return res.status(200).json({ success: true, message: 'Lead deleted successfully', lead: null });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
