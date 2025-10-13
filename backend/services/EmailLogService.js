@@ -1,14 +1,14 @@
 // EmailLogService: operations related to sending emails and email logs
 import { ApplicationError } from '../config/ApplicationError.js';
 import EmailLogRepository from '../repositories/EmailLogRepository.js';
+import { sendEmail } from './../config/email.config.js'
 
 const emailLogService = {
     // Send email to a lead and save the log
     async sendEmailToLead(emailData) {
         try {
-            // await EmailService.send(emailData);
-            //TODO: Integrate actual email sending logic here
-            
+            const {to, subject, body} = emailData;
+            sendEmail(to, subject, body);
             // After sending email, save log
             const savedLog = await EmailLogRepository.saveEmailLog({
                 leadId: emailData.leadId,
