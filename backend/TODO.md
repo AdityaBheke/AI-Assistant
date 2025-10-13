@@ -3,92 +3,153 @@ Steps after MERN setup.
 
 ### 🧩 **Step 1: RAG Stack Setup (Knowledge Integration)**
 
-**Goal:** Allow your assistant to answer queries using business-specific data.
+**Goal:** Enable your assistant to answer customer/business-specific queries.
 
-**What to do next:**
+**Tasks:**
 
-1. Choose a **Vector Database** — recommendation:
+1. **Choose and set up Vector DB:**
 
-   * **ChromaDB** (easy local setup, Langchain.js native support)
-   * or **Pinecone** (for scalable cloud vector storage).
-2. Choose **Embeddings Model** — e.g., `textembedding-gecko` from Gemini or `text-embedding-3-small` (if using OpenAI fallback).
-3. Implement:
+   * Preferred: **ChromaDB** (local, fast, Langchain.js native).
+   * Alternative: **Pinecone** (managed, scalable).
+2. **Select Embeddings Model:**
 
-   * `RAGLoader.js` to load and chunk your business PDF (via `langchain/document_loaders`).
-   * `RAGVectorStore.js` to generate and store embeddings.
-   * Retrieval logic inside `RAGRetriever.js` for query-time access.
+   * Gemini: `textembedding-gecko`.
+   * Fallback: `text-embedding-3-small` (OpenAI).
+3. **Implement:**
 
----
+   * `RAGLoader.js` → load and chunk business PDF.
+   * `RAGVectorStore.js` → store embeddings in DB.
+   * `RAGRetriever.js` → retrieve context during queries.
 
-### 🤖 **Step 2: Langchain.js Agent Design**
-
-**Goal:** Make your assistant *decision-capable* with access to backend tools.
-
-**What to do next:**
-
-1. Implement a **Langchain Agent** file (e.g., `AgentClient.js`) using:
-
-   * `ZeroShotAgent` or `StructuredChatAgent` (for multi-tool reasoning).
-   * `LLMClient` already using Gemini.
-2. Register **Tools** corresponding to backend services:
-
-   * `createLeadOrUpdateTool` → LeadService.
-   * `logConversationTool` → ConversationService.
-   * `sendEmailTool` → EmailService.
-   * `getProductDetailsTool` → ProductService.
-3. Define input schema and logic for each tool using `StructuredTool` in Langchain.js.
+✅ *Output:* Working retrieval pipeline for RAG-enabled responses.
 
 ---
 
-### 🧠 **Step 3: Core Chat Flow Integration**
+### 🧠 **Step 2: LangGraph + Langchain Agent Architecture**
 
-**Goal:** Enable real-time intelligent decision-making during chat.
+**Goal:** Use LangGraph to model AI decision-making and control flow.
 
-**What to do next:**
+**What LangGraph adds here:**
+Instead of manually handling “if-else” logic inside the controller, LangGraph orchestrates the **entire conversational and automation flow** as a **state graph** — where each node represents an agent or tool, and transitions are driven by AI decisions.
 
-1. Create a controller endpoint, e.g., `POST /api/assistant/chat`.
-2. In that controller:
+**Tasks:**
 
-   * Accept user input (message + optional email).
-   * Call the Langchain agent (Gemini model) with current conversation context.
-   * Agent uses tools to:
+1. **Define Agent Nodes (each representing a logical step):**
 
-     * Request email if missing.
-     * Save conversation in DB.
-     * Send welcome email (if new lead).
-3. Log everything in Conversation & EmailLog collections.
+   * `AskEmailNode` → asks for customer email.
+   * `CreateLeadNode` → updates/creates a Lead.
+   * `SendWelcomeEmailNode` → sends welcome email.
+   * `ConversationNode` → continues normal chat.
+   * `FollowUpNode` → handles 2-day email follow-up.
+   * `RAGResponseNode` → fetches knowledge-based answers.
+
+2. **Integrate LangChain Tools:**
+
+   * `createLeadOrUpdateTool`
+   * `sendEmailTool`
+   * `logConversationTool`
+   * `getProductDetailsTool`
+     *(These tools will be used as building blocks inside graph nodes.)*
+
+3. **Implement the Graph:**
+
+   * File: `src/ai/AgentGraph.js`
+   * Define flow:
+
+     ```
+     [Start] → [AskEmailNode]
+        ├── if email → [CreateLeadNode] → [SendWelcomeEmailNode]
+        ├── else → [ConversationNode]
+     ```
+   * Use LangGraph’s `StateGraph` or `MemoryGraph` to store chat state.
+
+✅ *Output:* A modular agent workflow that handles decisions dynamically.
+
+---
+
+### 💬 **Step 3: Core Chat Flow Integration**
+
+**Goal:** Connect the LangGraph agent to your Express API routes.
+
+**Tasks:**
+
+1. Create `/api/assistant/chat` route.
+
+2. Controller:
+
+   * Accepts user message and context.
+   * Passes conversation state to the LangGraph agent.
+   * Agent decides which node/tool to use (email, conversation, or RAG).
+   * Logs conversation to DB.
+
+3. Use the **RAG Retriever** for factual queries when needed.
+
+✅ *Output:* Chat endpoint powered by LangGraph-based decision engine.
 
 ---
 
 ### 🕓 **Step 4: Cron-Job Automation**
 
-**Goal:** Automate follow-up decisions every 2 days.
+**Goal:** Automate follow-up logic every 2 days via LangGraph nodes.
 
-**What to do next:**
+**Tasks:**
 
-1. Create a file `FollowUpJob.js` using `node-cron`.
+1. Create `FollowUpJob.js` (using `node-cron`).
 2. Every 2 days:
 
-   * Query `EmailLog` and `Lead` to find leads with **no reply**.
-   * Invoke the Langchain agent to:
+   * Query leads with no reply (via `EmailLog` and `Lead` collections).
+   * Invoke **LangGraph → FollowUpNode** with conversation context.
+   * Agent decides whether to send a follow-up.
+   * Use `sendEmailTool` + `logConversationTool`.
 
-     * Summarize last conversation.
-     * Compose a polite follow-up email.
-     * Trigger `sendEmailTool`.
-     * Log new email in `EmailLog`.
-3. Add this job in `src/index.js` or a dedicated `scheduler.js`.
+✅ *Output:* AI-driven automated follow-up system integrated with LangGraph state.
 
 ---
 
-### 🧰 **Step 5: Supporting Utilities**
+### ⚙️ **Step 5: Supporting Infrastructure**
 
-**Goal:** Support RAG and automation properly.
+**Goal:** Add utilities for smooth operation and monitoring.
 
-**What to do next:**
+**Tasks:**
 
-* `email.config.js` → finalize sending via Nodemailer or SendGrid.
-* `logger.js` → add logging for cron executions.
-* Optional: add `AIResponseCache` (Redis or MongoDB) to cache RAG retrievals.
+* `email.config.js` → configure Nodemailer/SendGrid.
+* `logger.js` → track graph and cron executions.
+* Optional: `AIStateStore` (Redis/Mongo) → persist agent states between sessions.
+* Optional: `AIResponseCache` → cache RAG results for repeated queries.
+
+✅ *Output:* Stable, observable, and maintainable agentic system.
 
 ---
 
+### 🧭 **Final Project Flow with LangGraph**
+
+```
+[User Message] 
+     ↓
+[LangGraph Agent]
+     ↓
+ ┌──────────────────────────────┐
+ │ Decision Flow Nodes:         │
+ │  AskEmail → CreateLead → SendWelcome │
+ │  ↓                             │
+ │  Conversation ↔ RAG ↔ FollowUp │
+ └──────────────────────────────┘
+     ↓
+[Services + DB + Email Integration]
+     ↓
+[Cron triggers FollowUpNode every 2 days]
+```
+
+---
+
+### ✅ Summary — Updated Roadmap Highlights
+
+| Step | Focus                 | LangGraph Role                                     |
+| ---- | --------------------- | -------------------------------------------------- |
+| 1    | RAG Setup             | Not used yet                                       |
+| 2    | AI Agent Architecture | **Core orchestration** — handles logic & branching |
+| 3    | Chat Integration      | **Main execution layer**                           |
+| 4    | Automation            | **Used by cron to trigger follow-up logic**        |
+| 5    | Utilities             | Supports state persistence and monitoring          |
+
+---
