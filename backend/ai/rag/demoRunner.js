@@ -1,5 +1,5 @@
 import { loadAndSplitDocs } from "./RAGLoader.js";
-import { storeEmbeddings } from "./RAGVectorStore.js";
+import { storeEmbeddings, deleteBySource } from "./RAGVectorStore.js";
 import { createRAGChain } from "./RAGChain.js";
 
 const loadAndStore = async () => {
@@ -8,16 +8,17 @@ const loadAndStore = async () => {
 }
 
 // loadAndStore();
+deleteBySource('AdityaB.pdf');
 
 const runRAGChain = async ()=>{
     const ragChain = await createRAGChain();
 
     const result = await ragChain.invoke({
-        question: "How many years of experience does Aditya have?"
+        question: "List the projects mentioned in the document.",
     })
 
     console.log("Response:",result.content);
     
 }
 
-runRAGChain();
+// runRAGChain();
