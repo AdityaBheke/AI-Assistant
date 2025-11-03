@@ -17,6 +17,9 @@ export async function createRAGChain() {
     Context:
     {context}
 
+    Chat History:
+    {messages}
+
     Question:
     {question}
 
@@ -24,9 +27,14 @@ export async function createRAGChain() {
     `);
     const ragChain = RunnableSequence.from([
         async (input)=>{
+          console.log("Input received to RAG", input);
+          
             const result = await getRetriever(input.question);
+            const history = input.messages.map((msg)=>{return JSON.stringify(msg)}).join('\n\n') || '';
+            console.log("history", history);
+            
             const context = result.map((doc)=>doc.pageContent).join("\n\n");
-            return { question: input.question, context}
+            return { question: input.question, context, messages: history };
         },
         prompt,
         llm

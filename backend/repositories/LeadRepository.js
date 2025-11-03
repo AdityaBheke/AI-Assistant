@@ -41,6 +41,14 @@ const LeadRepository = {
             throw new Error('Error deleting lead: ' + error.message);
         }
     },
+    // Get pending leads
+    async getPendingLeads(){
+        try {
+            return await Lead.find({status: "new"}) 
+        } catch (error) {
+            throw new Error('Error fetching pending lead: ' + error.message);
+        }
+    },
     // Update lead status by ID
     async updateLeadStatusById(leadId, status) {
         try {
@@ -52,7 +60,9 @@ const LeadRepository = {
     // Find leads by email
     async findLeadsByEmail(email) {
         try {
-            return await Lead.find({ email });
+            const lead = await Lead.findOne({ email });
+            console.log('Lead found:', lead);
+            return lead;
         } catch (error) {
             throw new Error('Error finding leads by email: ' + error.message);
         }

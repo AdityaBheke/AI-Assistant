@@ -2,14 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
-
+import './cron/followUpCron.js'
 import connectDB from './config/mongoose.connection.js';
 import userRouter from './routes/UserRoutes.js';
 import productRouter from './routes/ProductRoute.js';
 import leadRouter from './routes/LeadRoutes.js';
 import emailLogRouter from './routes/EmailLogRoute.js';
 import conversationRouter from './routes/ConversationRoute.js';
-
+import agentRouter from './routes/AgentRoute.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -29,6 +29,7 @@ app.use('/api/products', productRouter);
 app.use('/api/leads', leadRouter);
 app.use('/api/emails', emailLogRouter);
 app.use('/api/conversations', conversationRouter);
+app.use('/api/agent', agentRouter);
 
 // 404 handler for unknown API routes — standardized response
 app.use((req, res, next) => {

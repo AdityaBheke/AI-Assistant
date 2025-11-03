@@ -6,10 +6,21 @@ const leadService = {
     // Create a new lead
     createLead: async (leadData)=>{
         try {
+            console.log("Received lead data", leadData);
+            
             const lead = await LeadRepository.createLead(leadData);
-            return {lead};
+            return lead;
         } catch (error) {
             throw new ApplicationError(error.message || "Error creating lead", error.statusCode || 500);
+        }
+    },
+    // Get pending leads
+    getPendingLeads: async ()=>{
+        try {
+            const leads = await LeadRepository.getPendingLeads();
+            return leads;
+        } catch (error) {
+            throw new ApplicationError(error.message || "Error fetching pending leads", error.statusCode || 500);
         }
     },
     // Retrieve all leads
@@ -25,8 +36,7 @@ const leadService = {
     getLeadById: async (leadId)=>{
         try {
             const lead = await LeadRepository.getLeadById(leadId);
-            if (!lead) throw new ApplicationError("Lead not found", 404)
-            return {lead}
+            return lead;
         } catch (error) {
             throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
@@ -35,8 +45,7 @@ const leadService = {
     updateLead: async (leadId, updateData)=>{
         try {
             const lead = await LeadRepository.updateLeadById(leadId, updateData);
-            if (!lead) throw new ApplicationError("Lead not found", 404)
-            return {lead}
+            return lead
         } catch (error) {
             throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }
@@ -65,7 +74,7 @@ const leadService = {
     findLeadsByEmail: async (email)=>{
         try {
             const lead = await LeadRepository.findLeadsByEmail(email);
-            if (!lead) throw new ApplicationError("Lead not found", 404)
+            return lead;
         } catch (error) {
             throw new ApplicationError(error.message || "Error fetching lead", error.statusCode || 500);
         }

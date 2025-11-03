@@ -11,8 +11,8 @@ const pinecone = new Pinecone({
     apiKey: process.env.PINECONE_API_KEY
 });
 
-const NAMESPACE = "demo-namespace";
-const index = pinecone.Index("demo");
+const NAMESPACE = "business";
+const index = pinecone.Index("business-knowledge");
 
 // Google embedding model name
 const embeddings = new GoogleGenerativeAIEmbeddings({

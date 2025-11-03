@@ -20,9 +20,10 @@ const emailLogSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['sent', 'failed', 'replied'],
+        enum: ['sent', 'replied'],
         default: 'sent'
     },
+    messageId: String,
     updatedAt: {
         type: Date,
         default: Date.now

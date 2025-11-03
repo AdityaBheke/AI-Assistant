@@ -5,15 +5,15 @@ import { sendEmail } from './../config/email.config.js'
 
 const emailLogService = {
     // Send email to a lead and save the log
-    async sendEmailToLead(emailData) {
+    async sendEmailToLead(leadId, to, subject, body) {
         try {
-            const {to, subject, body} = emailData;
-            sendEmail(to, subject, body);
+            const messageId = await sendEmail(to, subject, body);
             // After sending email, save log
             const savedLog = await EmailLogRepository.saveEmailLog({
-                leadId: emailData.leadId,
-                subject: emailData.subject,
-                body: emailData.body,
+                leadId: leadId,
+                subject: subject,
+                body: body,
+                messageId: messageId,
                 sentAt: new Date(),
                 status: 'sent'
             });
@@ -24,26 +24,14 @@ const emailLogService = {
         }
     },
 
-    // Get all email logs for a specific lead
-    async getEmailLogsByLeadId(leadId) {
+    async updateEmailLogByMessageId(messageId){
         try {
-            const logs = await EmailLogRepository.getEmailLogsByLeadId(leadId);
-            return {emailLogs: logs};
+            const emailLog = await EmailLogRepository.updateEmailLogByMessageId(messageId);
+            return emailLog
         } catch (error) {
-            throw new ApplicationError('Failed to fetch email logs by Lead ID: ' + error.message, 500);
+            throw new ApplicationError('Failed to update emaillog by messageId: ' + error.message, 500);
         }
     },
-
-    // Get last email log for a specific lead
-    async getLastEmailLogByLeadId(leadId) {
-        try {
-            const [lastLog] = await EmailLogRepository.getLastEmailLogByLeadId(leadId);
-            return {emailLog: lastLog || null};
-        } catch (error) {
-            throw new ApplicationError('Failed to fetch last email log by Lead ID: ' + error.message, 500);
-        }
-    },
-
     // Update email log status (e.g., sent, failed, pending)
     async updateEmailLogStatus(emailLogId, status) {
         try {
@@ -54,15 +42,6 @@ const emailLogService = {
         }
     },
 
-    // Get emails pending follow-up after X days
-    async getPendingFollowUpEmails(daysInterval) {
-        try {
-            const pendingEmails = await EmailLogRepository.getPendingFollowUpEmails(daysInterval);
-            return {emailLogs: pendingEmails};
-        } catch (error) {
-            throw new ApplicationError('Failed to fetch pending follow-up emails: ' + error.message, 500);
-        }
-    }
 };
 
 export default emailLogService;

@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
  * Connect to MongoDB using mongoose.
  * Reads MONGO_URI from environment. Returns a Promise that resolves when connected.
  */
-export default function connectDB() {
+export default async function connectDB() {
     const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/assistant_db';
 
     const options = {
@@ -13,10 +13,9 @@ export default function connectDB() {
         useUnifiedTopology: true,
     };
 
-    return mongoose.connect(uri, options).then((mongooseInstance) => {
-        console.log('Connected to MongoDB');
-        return mongooseInstance;
-    });
+    const mongooseInstance = await mongoose.connect(uri, options);
+    console.log('Connected to MongoDB');
+    return mongooseInstance;
 }
 
 export { mongoose };

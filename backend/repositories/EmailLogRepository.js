@@ -9,21 +9,14 @@ const EmailLogRepository = {
             throw new Error('Error saving email log: ' + error.message);
         }
     },
-    // Get email logs by Lead ID
-    async getEmailLogsByLeadId(leadId) {
+
+    async updateEmailLogByMessageId(messageId){
         try {
-            return await EmailLog.find({ leadId });
+            const emailLog = await EmailLog.findOneAndUpdate({messageId: messageId, status:'sent'}, {status:"replied"}, {new:true})
+            return emailLog;
         } catch (error) {
-            throw new Error('Error fetching email logs by Lead ID: ' + error.message);
+            throw new Error('Error updating email log: ' + error.message);
         }
-    },
-    // Get last email log by Lead ID
-    async getLastEmailLogByLeadId(leadId) {
-        try {
-            return await EmailLog.find({ leadId }).sort({ sentAt: -1 }).limit(1);
-        } catch (error) {
-            throw new Error('Error fetching last email log by Lead ID: ' + error.message);
-        }   
     },
      // Update email log status by ID
     async updateEmailLogStatusById(emailLogId, status) {
@@ -33,16 +26,6 @@ const EmailLogRepository = {
             throw new Error('Error updating email log status: ' + error.message);
         }   
     },
-    // Find leads for next follow-up
-    async getPendingFollowUpEmails(daysInterval) {
-        try {
-            const cutoffDate = new Date();
-            cutoffDate.setDate(cutoffDate.getDate() - daysInterval);
-            return await EmailLog.find({ sentAt: { $lt: cutoffDate }, status: 'sent' });
-        } catch (error) {
-            throw new Error('Error fetching pending follow-up emails: ' + error.message);
-        }
-    }
 };
 
 export default EmailLogRepository;
