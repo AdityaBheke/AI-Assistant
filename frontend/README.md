@@ -1,16 +1,9 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| **Method Name**                                              | **Tools / Technologies Required**                                                          | **Skills Required**                                       | **Cost**                          | **Response / Video Generation Time**            |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------------------------- | --------------------------------- | ----------------------------------------------- |
+| **1. 2D Animated Avatar (Lottie)**                           | React + `lottie-react`, JSON animation from LottieFiles or Adobe After Effects (Bodymovin) | Basic React, simple animation trigger logic               | ✅ Free                            | ⚡ Instant (plays while TTS audio runs)          |
+| **2. 3D Avatar (Ready Player Me + Three.js)**                | Ready Player Me (for 3D model), `three.js`, `@react-three/fiber`, `@react-three/drei`      | Intermediate JS, basic 3D scene setup                     | ✅ Free                            | ⚡ Real-time (rendered live in browser)          |
+| **3. Custom 3D Avatar with Lip-Sync**                        | Blender (for avatar), Three.js or Babylon.js, Web Audio API (for lip-sync)                 | Intermediate–Advanced: 3D modeling, WebGL, audio analysis | ✅ Free                            | ⚡ Real-time (depends on browser performance)    |
+| **4. Talking Avatar via API (D-ID, HeyGen, SoulGen)**        | D-ID API / HeyGen API / SoulGen API                                                        | No coding beyond API calls                                | ⚠️ Paid (free tier available)     | ⏳ 5–30 sec (generates a video after processing) |
+| **5. Real-Time Video Avatar API (Hume.ai / Synthesia Live)** | Hume.ai Realtime API / Synthesia Live API                                                  | Moderate coding (API + WebSocket)                         | ⚠️ Paid (some free tokens)        | ⚡ Near real-time (1–3 sec delay)                |
+| **6. GIF/PNG Frame-Based Avatar (Simple Sprite Animation)**  | React + sequence of PNG frames or CSS sprite                                               | Beginner-level React/CSS                                  | ✅ Free                            | ⚡ Instant                                       |
+| **7. Virtual Camera / WebRTC Avatar (Advanced)**             | OBS Virtual Cam, WebRTC, or Unity WebGL                                                    | Advanced (video streaming, WebRTC, graphics)              | ⚠️ Usually Free but complex setup | ⚡ Real-time (streaming-based)                   |
